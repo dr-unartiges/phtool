@@ -55,63 +55,66 @@ try {
             //console.log(jsonContent)
             var filteredOut = [];
 
-            var filteredContent =
-                jsonContent.data.filter(model => {
-                    var currentModel = new Model(model);
-                    var arrayOfTrue = [];
+            var filteredContent = jsonContent.data.filter(model => {
+                var currentModel = new Model(model);
+                var arrayOfTrue = [];
 
-                    argsKeys.forEach(key => {
-                        switch (key) {
-                            case "v":
-                                arrayOfTrue.push(
-                                    currentModel.checkNumberOfVideos(args.v)
-                                );
-                                break;
+                argsKeys.forEach(key => {
+                    switch (key) {
+                        case "v":
+                            arrayOfTrue.push(
+                                currentModel.checkNumberOfVideos(args.v)
+                            );
+                            break;
 
-                            case "p":
-                                arrayOfTrue.push(
-                                    currentModel.checkNumberOfImages(args.p)
-                                );
-                                break;
+                        case "p":
+                            arrayOfTrue.push(
+                                currentModel.checkNumberOfImages(args.p)
+                            );
+                            break;
 
-                            case "t":
-                                arrayOfTrue.push(
-                                    currentModel.checkProfile(args.t)
-                                );
-                                break;
-                        }
-                    });
-
-                    if (args.and) {
-                        for (var value in arrayOfTrue) {
-                            if (arrayOfTrue[value] === false) {
-                                filteredOut.push(model);
-                                return false;
-                            }
-                        }
-
-                        return true;
-                    } else {
-                        for (var value in arrayOfTrue) {
-                            if (arrayOfTrue[value] === true) {
-                                return true;
-                            }
-                        }
-                        filteredOut.push(model);
-                        return false;
+                        case "t":
+                            arrayOfTrue.push(currentModel.checkProfile(args.t));
+                            break;
                     }
-                })
-            console.log(filteredContent)
+                });
+
+                if (args.and) {
+                    for (var value in arrayOfTrue) {
+                        if (arrayOfTrue[value] === false) {
+                            filteredOut.push(model);
+                            return false;
+                        }
+                    }
+
+                    return true;
+                } else {
+                    for (var value in arrayOfTrue) {
+                        if (arrayOfTrue[value] === true) {
+                            return true;
+                        }
+                    }
+                    filteredOut.push(model);
+                    return false;
+                }
+            });
+            console.log(filteredContent);
 
             if (args.f) {
                 console.log(filteredOut);
             }
 
-            if(args.o) {
-                filteredContentText = filteredContent.map(x=>x.name).join("\n")
-                filteredOutText = filteredOut.map(x=>x.name).join("\n")
-                fs.writeFileSync('filteredContent.txt', filteredContentText, 'utf8')
-                fs.writeFileSync('filteredOut.txt', filteredOutText, 'utf8')
+            if (args.o) {
+                filteredContentText = filteredContent
+                    .map(x => x.name)
+                    .join("\n");
+                filteredOutText = filteredOut.map(x => x.name).join("\n");
+                fs.writeFileSync(
+                    "filteredContent.txt",
+                    filteredContentText,
+                    "utf8"
+                );
+                fs.writeFileSync("filteredOut.txt", filteredOutText, "utf8");
             }
         } else {
             console.log(message);
