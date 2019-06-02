@@ -3,6 +3,12 @@ var axios = require("axios");
 var fs = require("fs");
 var settings = require("./settings")
 
+var dir = './results';
+
+if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir);
+}
+
 function urlGenerator(config, page){
 
     let {username, city, gender, verified,videos, orientation, relation, country, o, age1, age2} = config
